@@ -1,0 +1,100 @@
+"Emitter"
+# ---------- Add Particle System for Boid Simulation ----------
+ps_mod = emitter.modifiers.new(
+"BoidSystem"
+,
+type
+=
+'PARTICLE_SYSTEM'
+)
+psys = emitter.particle_systems[-
+1
+]
+psettings = bpy.data.particles.new(name=
+"BoidParticles"
+)
+psys.settings = psettings
+# Configure emitter settings.
+psettings.
+type
+=
+'EMITTER'
+psettings.frame_start =
+1
+psettings.frame_end =
+1
+# Emit all particles at once.
+psettings.lifetime =
+250
+psettings.count =
+200
+# Adjust for more or fewer instances.
+psettings.emit_from =
+'VOLUME'
+# Enable rotation so the instanced objects inherit particle orientation.
+psettings.use_rotations =
+True
+psettings.rotation_mode =
+'VELOCITY'
+# Align rotation with movement.
+# Optionally, add a phase factor to vary the initial rotation.
+psettings.phase_factor =
+1.0
+# Use object instancing: each particle will display your imported object.
+psettings.render_type =
+'OBJECT'
+psettings.instance_object = imported_obj
+# ---------- Set Up Boid Physics ----------
+psettings.physics_type =
+'BOIDS'
+boid = psettings.boid_settings
+boid.use_flight =
+True
+# Allow free 3D movement.
+boid.max_speed =
+3.0
+# Increased speed for a larger space.
+boid.max_acceleration =
+0.7
+# More dynamic acceleration.
+# Add boid rules to simulate flocking behavior.
+rule_follow = boid.rules.add()
+rule_follow.
+type
+=
+'FOLLOW'
+rule_follow.value =
+0.5
+rule_avoid = boid.rules.add()
+rule_avoid.
+type
+=
+'AVOID'
+rule_avoid.value =
+1.0
+rule_flock = boid.rules.add()
+rule_flock.
+type
+=
+'FLOCK'
+rule_flock.value =
+0.8
+# ---------- Add a 3D Goal for the Swarm ----------
+# Create an empty as a moving target to guide the boids.
+bpy.ops.
+object
+.empty_add(
+type
+=
+'PLAIN_AXES'
+, location=(-
+10
+, -
+10
+,
+10
+))
+goal = bpy.context.active_object
+goal.name =
+"BoidGoal"
+boid.goal_object = goal

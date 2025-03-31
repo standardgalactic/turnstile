@@ -1,0 +1,100 @@
+0.7
+# Increased acceleration
+# Add boid rules to simulate flocking.
+rule_follow = boid.rules.add()
+rule_follow.
+type
+=
+'FOLLOW'
+rule_follow.value =
+0.5
+rule_avoid = boid.rules.add()
+rule_avoid.
+type
+=
+'AVOID'
+rule_avoid.value =
+1.0
+rule_flock = boid.rules.add()
+rule_flock.
+type
+=
+'FLOCK'
+rule_flock.value =
+0.8
+# ---------- Add a 3D Goal for the Swarm ----------
+# Create an empty to serve as a moving target, animated in 3D.
+bpy.ops.
+object
+.empty_add(
+type
+=
+'PLAIN_AXES'
+, location=(-
+10
+, -
+10
+,
+10
+))
+goal = bpy.context.active_object
+goal.name =
+"BoidGoal"
+boid.goal_object = goal
+boid.use_goal =
+True
+boid.goal_weight =
+0.3
+# Animate the goal through 3D space.
+goal.keyframe_insert(data_path=
+"location"
+, frame=
+1
+)
+goal.location = (
+10
+,
+10
+,
+20
+)
+goal.keyframe_insert(data_path=
+"location"
+, frame=
+150
+)
+goal.location = (-
+10
+,
+0
+,
+15
+)
+goal.keyframe_insert(data_path=
+"location"
+, frame=
+250
+)
+# ---------- Add a Turbulence Force Field for Extra Chaos ----------
+bpy.ops.
+object
+.effector_add(
+type
+=
+'TURBULENCE'
+, location=(
+0
+,
+0
+,
+30
+))
+turbulence = bpy.context.active_object
+turbulence.field.strength =
+10.0
+turbulence.field.size =
+5.0
+# ---------- Set the Scene Timeline ----------
+bpy.context.scene.frame_start =
+1
+bpy.context.scene.frame_end =

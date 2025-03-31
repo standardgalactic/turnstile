@@ -1,0 +1,100 @@
+# Random position within a specified range
+x = random.uniform(-
+20
+,
+20
+)
+    y = random.uniform(-
+20
+,
+20
+)
+# Random radius (width) and height for the column
+radius = random.uniform(
+0.5
+,
+2.0
+)
+    height = random.uniform(
+2.0
+,
+20.0
+)
+# Place the cylinder so its base sits on the ground (z = height/2)
+bpy.ops.mesh.primitive_cylinder_add(radius=radius, depth=height, location=(x, y, height /
+2
+))
+How It Works
+Clearing the Scene:
+This part removes all existing objects.
+Creating Columns:
+The script then creates 50 cylinders (modifiable via
+num_columns
+) with random positions, radii, and heights. The cylinders are placed so that their bases sit on the ground.
+Simply run this script in Blender’s Scripting workspace, and you'll see a field of columns without any camera or animation involved. Enjoy experimenting with the parameters to suit your scene!
+Dijiste:
+try to create the craziest thing you can like a physics similation using swarm behaviour of birds maybe
+ChatGPT dijo:
+Reasoned about swarm behavior simulation for 18 seconds
+Below is a wild Blender Python script that sets up a crude “swarm” simulation using Blender’s built‐in boid physics. In this example, a simple “bird” (a cone) is instanced via a particle system on a plane. The boid settings and extra force fields (like turbulence) help create unpredictable, flocking behavior.
+Paste this script into Blender’s Scripting workspace and run it. (You might need to hit play in the timeline to see the simulation evolve.) Feel free to tweak the settings for even crazier results!
+python
+Copiar código
+import
+bpy
+import
+random
+import
+math
+# ---------- Clear the Scene ----------
+bpy.ops.
+object
+.select_all(action=
+'SELECT'
+)
+bpy.ops.
+object
+.delete(use_global=
+False
+)
+# ---------- Create a simple Bird object ----------
+# We use a cone as a placeholder for a bird.
+bpy.ops.mesh.primitive_cone_add(radius1=
+0.2
+, depth=
+0.5
+, location=(
+0
+,
+0
+,
+0
+))
+bird = bpy.context.active_object
+bird.name =
+"Bird"
+# Rotate so the tip (which will be the front) points along the -Y axis (default view direction for boids)
+bird.rotation_euler[
+0
+] = math.radians(
+90
+)
+# Optionally, give the bird a material for some flair.
+mat = bpy.data.materials.new(name=
+"BirdMat"
+)
+mat.diffuse_color = (
+1
+,
+0.5
+,
+0.1
+,
+1
+)
+bird.data.materials.append(mat)
+# ---------- Create an Emitter ----------
+# This plane will emit the birds. They will be created as particles using boid physics.
+bpy.ops.mesh.primitive_plane_add(size=
+10
+, location=(

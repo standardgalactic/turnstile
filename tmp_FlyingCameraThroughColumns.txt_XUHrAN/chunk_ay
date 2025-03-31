@@ -1,0 +1,100 @@
+    new_obj.name =
+f"TetraCopy_
+{i}
+"
+    new_obj.location = Vector((random.uniform(-bounds, bounds),
+                                 random.uniform(-bounds, bounds),
+                                 random.uniform(-bounds, bounds)))
+    new_obj.rotation_euler = (random.random()*
+2
+*math.pi,
+                              random.random()*
+2
+*math.pi,
+                              random.random()*
+2
+*math.pi)
+# Initialize a custom property to store velocity (as a list of 3 floats).
+new_obj[
+"vel"
+] = [random.uniform(-
+0.1
+,
+0.1
+)
+for
+_
+in
+range
+(
+3
+)]
+    scene_collection.objects.link(new_obj)
+    copies.append(new_obj)
+# ---------- Define Global Motion Parameters ----------
+random_factor =
+0.05
+# Magnitude of random motion added each frame.
+attractor = Vector((
+0
+,
+0
+,
+0
+))
+# The attractor point (here, the origin).
+attractor_factor =
+0.001
+# Strength of the attractor force.
+damping =
+0.99
+# Damping factor to gradually slow down motion.
+dt =
+1
+# Time step (per frame).
+# ---------- Define a Frame Change Handler ----------
+def
+update_objects
+(
+scene
+):
+for
+obj
+in
+copies:
+# Get the current velocity (stored as a custom property).
+vel = Vector(obj[
+"vel"
+])
+        pos = obj.location.copy()
+# Random walk component.
+random_delta = Vector((random.uniform(-random_factor, random_factor),
+                                 random.uniform(-random_factor, random_factor),
+                                 random.uniform(-random_factor, random_factor)))
+# Compute the attractor force pulling toward the origin.
+attractor_force = (attractor - pos) * attractor_factor
+# Update velocity: add random walk and attractor force then apply damping.
+vel = (vel + random_delta + attractor_force) * damping
+# Bounce off boundaries: if an axis is beyond the bounds, reverse that velocity component.
+for
+i
+in
+range
+(
+3
+):
+if
+pos[i] < -bounds
+or
+pos[i] > bounds:
+                vel[i] = -vel[i]
+# Update position.
+obj.location = pos + vel * dt
+# Add a bit of spin: rotate slightly around the Z axis.
+obj.rotation_euler.rotate_axis(
+"Z"
+,
+0.1
+)
+# Store the updated velocity back into the custom property.
+obj[

@@ -1,0 +1,100 @@
+* math.pi)
+# Initialize a custom property to hold its velocity (as a list of three floats)
+new_obj[
+"vel"
+] = [random.uniform(-
+0.1
+,
+0.1
+)
+for
+_
+in
+range
+(
+3
+)]
+# Link the new object to our collection
+collection.objects.link(new_obj)
+# ---------- Define Global Motion Parameters ----------
+random_factor =
+0.05
+# how much random motion is added each frame
+attractor = Vector((
+0
+,
+0
+,
+0
+))
+# objects will tend toward the origin
+attractor_factor =
+0.001
+# strength of the attractor force
+damping =
+0.99
+# slow down the velocity over time
+dt =
+1
+# time step (per frame)
+# ---------- Define a Frame Change Handler to Update the Objects ----------
+def
+update_objects
+(
+scene
+):
+for
+obj
+in
+collection.objects:
+# Get current velocity from the custom property and convert to a Vector.
+vel = Vector(obj[
+"vel"
+])
+        pos = obj.location.copy()
+# Compute a random delta for a random walk.
+random_delta = Vector((random.uniform(-random_factor, random_factor),
+                                 random.uniform(-random_factor, random_factor),
+                                 random.uniform(-random_factor, random_factor)))
+# Compute the attractor force: pull toward the attractor point.
+attractor_force = (attractor - pos) * attractor_factor
+# Update the velocity: add random walk and attractor, then apply damping.
+vel = (vel + random_delta + attractor_force) * damping
+# Bounce off the boundaries: if an axis exceeds the bounds, reverse that component.
+for
+i
+in
+range
+(
+3
+):
+if
+pos[i] < -bounds
+or
+pos[i] > bounds:
+                vel[i] = -vel[i]
+# Update the object's location based on the velocity.
+obj.location = pos + vel * dt
+# Apply a bit of rotation (for spinning); here, we rotate a fixed amount around the Z axis.
+obj.rotation_euler.rotate_axis(
+"Z"
+,
+0.1
+)
+# Save the updated velocity back into the custom property.
+obj[
+"vel"
+] = [vel.x, vel.y, vel.z]
+# Remove any previous handler with the same name to avoid duplicates.
+for
+handler
+in
+bpy.app.handlers.frame_change_post:
+if
+handler.__name__ ==
+"update_objects"
+:
+        bpy.app.handlers.frame_change_post.remove(handler)
+# Register our handler so it runs each frame.
+bpy.app.handlers.frame_change_post.append(update_objects)
+# ---------- Set the Scene Timeline ----------

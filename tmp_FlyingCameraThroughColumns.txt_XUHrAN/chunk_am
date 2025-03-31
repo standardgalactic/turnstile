@@ -1,0 +1,100 @@
+boid.use_goal =
+True
+boid.goal_weight =
+0.3
+# Animate the goal through 3D space.
+goal.keyframe_insert(data_path=
+"location"
+, frame=
+1
+)
+goal.location = (
+10
+,
+10
+,
+20
+)
+goal.keyframe_insert(data_path=
+"location"
+, frame=
+150
+)
+goal.location = (-
+10
+,
+0
+,
+15
+)
+goal.keyframe_insert(data_path=
+"location"
+, frame=
+250
+)
+# ---------- Add a Vortex Force Field for Rapid Spinning ----------
+# This vortex force field will impart a spinning motion to the particles.
+bpy.ops.
+object
+.effector_add(
+type
+=
+'VORTEX'
+, location=(
+0
+,
+0
+,
+20
+))
+vortex = bpy.context.active_object
+vortex.field.strength =
+20.0
+# Increase for more rapid spinning.
+# ---------- Set the Scene Timeline ----------
+bpy.context.scene.frame_start =
+1
+bpy.context.scene.frame_end =
+250
+# Finished!
+Explanation
+Object Import & Scaling:
+Your custom object is imported from the specified folder and scaled down to 5% of its original size.
+Cube Emitter & Particle System:
+A large cube emitter is created so that particles are emitted throughout a wide 3D volume. The particle system is set to use your object as its instance, with rotations enabled to inherit each particle’s orientation.
+Boid Simulation:
+The particle system is configured with boid physics so the objects follow swarm behaviors (with follow, avoid, and flock rules). A moving empty (goal) is animated to guide their flight.
+Vortex Force Field:
+A vortex force field is added to impart rapid spinning, making the simulation appear more chaotic.
+Linking:
+The objects are linked to the particle locations, so as the boid simulation updates the particle positions and rotations, the instanced objects follow accordingly.
+Run this script in Blender’s Scripting workspace and press
+Play
+in the timeline. You should see a swarm of small tetraorthodrome instances, spinning rapidly and moving through a larger 3D volume. Enjoy experimenting with the parameters to further tweak the behavior!
+Dijiste:
+it was fine before, now I see them as little dots and they are falling, but it only still imported one object file, and not associating it with the boid particle locations
+ChatGPT dijo:
+Reasoned about boid simulation issues for 25 seconds
+Below is a revised script that does the following:
+Imports your tetraorthodrome.obj once, scales it to a reasonable size, and hides the original so that only its instances are visible.
+Uses a cube emitter with a particle system set to emit from its volume.
+Disables gravity so that the boid particles don’t fall.
+Sets up boid physics so that each particle uses your imported object as its instance.
+Adds a vortex force field to spin the objects rapidly.
+Try running this script in Blender’s Scripting workspace:
+python
+Copiar código
+import
+bpy
+import
+random
+import
+math
+import
+os
+# ---------- Clear the Scene ----------
+bpy.ops.
+object
+.select_all(action=
+'SELECT'
+)

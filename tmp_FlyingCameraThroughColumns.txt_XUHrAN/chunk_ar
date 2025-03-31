@@ -1,0 +1,100 @@
+psettings.lifetime =
+250
+psettings.count =
+200
+# Adjust the count for more or fewer instances.
+psettings.emit_from =
+'VOLUME'
+# Emit from the entire volume of the cube.
+# Use object instancing: your imported object will be instanced for each particle.
+psettings.render_type =
+'OBJECT'
+psettings.instance_object = imported_obj
+# Add rotation to particles.
+psettings.use_rotations =
+True
+psettings.rotation_mode =
+'GLOB_X'
+# Use the global X axis for rotation.
+psettings.angular_velocity_mode =
+'VELOCITY'
+# Rotate based on particle velocity.
+psettings.angular_velocity_factor =
+2.0
+# Adjust to control spin speed.
+# ---------- Set Up Boid Physics ----------
+psettings.physics_type =
+'BOIDS'
+# Ensure boid settings are accessed correctly.
+boid = psettings.boids
+# Note: In some Blender versions this might be psettings.boid_settings
+boid.use_flight =
+True
+# Allow free 3D movement.
+boid.max_speed =
+3.0
+# Increase speed for a larger space.
+boid.max_acceleration =
+0.7
+# Increase acceleration for dynamic motion.
+# Add boid behavior rules.
+rule_follow = boid.rules.add()
+rule_follow.
+type
+=
+'FOLLOW'
+rule_follow.value =
+0.5
+rule_avoid = boid.rules.add()
+rule_avoid.
+type
+=
+'AVOID'
+rule_avoid.value =
+1.0
+rule_flock = boid.rules.add()
+rule_flock.
+type
+=
+'FLOCK'
+rule_flock.value =
+0.8
+# ---------- Add a 3D Goal for the Swarm ----------
+# Create an empty that serves as a moving target for the boids.
+bpy.ops.
+object
+.empty_add(
+type
+=
+'PLAIN_AXES'
+, location=(-
+10
+, -
+10
+,
+10
+))
+goal = bpy.context.active_object
+goal.name =
+"BoidGoal"
+boid.goal_object = goal
+boid.use_goal =
+True
+boid.goal_weight =
+0.3
+# Animate the goal in 3D space to encourage more varied motion.
+goal.keyframe_insert(data_path=
+"location"
+, frame=
+1
+)
+goal.location = (
+10
+,
+10
+,
+20
+)
+goal.keyframe_insert(data_path=
+"location"
+, frame=

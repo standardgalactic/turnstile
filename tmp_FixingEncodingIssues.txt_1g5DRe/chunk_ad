@@ -1,0 +1,100 @@
+(output_file,
+"w"
+, encoding=
+"utf-8"
+)
+as
+out:
+    out.write(extracted_text)
+print
+(
+f"Extracted text written to
+{output_file}
+")
+📝 Or... make it flexible!
+Want to specify the file via command line? Change your
+main()
+to this:
+python
+Copiar código
+import
+sys
+def
+main
+():
+if
+len
+(sys.argv) !=
+2
+:
+print
+(
+"Usage: python extract_mhtml_text.py <file.mhtml>"
+)
+return
+file_path = sys.argv[
+1
+]
+if
+not
+os.path.isfile(file_path):
+print
+(
+f"File '
+{file_path}
+' not found.")
+return
+print
+(
+f'Processing
+{file_path}
+...')
+    extracted_text = extract_text_from_mhtml(file_path)
+    output_file = os.path.splitext(file_path)[
+0
+] +
+".txt"
+with
+open
+(output_file,
+"w"
+, encoding=
+"utf-8"
+)
+as
+out:
+        out.write(extracted_text)
+print
+(
+f"Extracted text written to
+{output_file}
+")
+Then you can run it like:
+bash
+Copiar código
+python extract_mhtml_text.py my_file.mhtml
+Want help cleaning up the output or fixing messed-up smart quotes after the fact? I got you.
+Dijiste:
+the whole script (with sys)
+ChatGPT dijo:
+You got it! Here's the
+full updated script
+with:
+✅ Fix for the encoding/character issues (no more
+���
+)
+📁 Option to process a
+single file via command-line argument
+🧼 Clean and clear structure
+✅ Full Script:
+extract_mhtml_text.py
+python
+Copiar código
+#!/usr/bin/env python3
+"""
+A script to extract plain text from a single MHTML file provided as a command-line argument.
+It parses the MHTML file as a MIME message, extracts text from its HTML (or plain text) parts,
+removes HTML tags using BeautifulSoup, and writes the result to a .txt file.
+
+Usage:
+    python extract_mhtml_text.py your_file.mhtml

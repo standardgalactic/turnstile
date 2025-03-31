@@ -1,0 +1,100 @@
+True
+boid.goal_weight =
+0.3
+# Optionally animate the goal to create a dynamic target
+goal.keyframe_insert(data_path=
+"location"
+, frame=
+1
+)
+goal.location = (
+0
+,
+5
+,
+5
+)
+goal.keyframe_insert(data_path=
+"location"
+, frame=
+150
+)
+goal.location = (
+0
+, -
+5
+,
+3
+)
+goal.keyframe_insert(data_path=
+"location"
+, frame=
+250
+)
+# ---------- Add a Turbulence Force Field for Extra Craziness ----------
+bpy.ops.
+object
+.effector_add(
+type
+=
+'TURBULENCE'
+, location=(
+0
+,
+0
+,
+3
+))
+turbulence = bpy.context.active_object
+turbulence.field.strength =
+5.0
+turbulence.field.size =
+2.0
+# ---------- Set the Scene Timeline ----------
+bpy.context.scene.frame_start =
+1
+bpy.context.scene.frame_end =
+250
+# Finished! Press Play in the Timeline to see your crazy boid simulation.
+How It Works
+Bird Object:
+A cone is created and rotated so its tip (the “front”) points in the direction the boid will travel.
+Emitter & Particle System:
+A plane is used to emit particles that are instanced as “birds.” The particle system’s physics is set to BOIDS.
+Boid Settings:
+The boid physics parameters (max speed, acceleration, and rules for following, avoiding, and flocking) are adjusted for a dynamic swarm.
+Goal & Turbulence:
+An empty object acts as a moving target (animated over time) and a turbulence force field adds randomness to the swarm’s movement.
+Enjoy watching your virtual flock perform a wild dance across the scene!
+Dijiste:
+I kind of think it looks like an ising synchronization it started random and than they gathered into like three flocks, sort of like congealing. can you explain this?
+ChatGPT dijo:
+Reasoned about Ising model and flocking for 8 seconds
+The behavior you're seeing is a common emergent property of flocking simulations. In these systems, simple local rules—like trying to stay close to your neighbors (cohesion), matching their speed (alignment), and avoiding collisions (separation)—can lead to complex, organized patterns. In your simulation, it appears that the cohesion (or "flocking") rule is strong enough that the boids end up synchronizing their motion and grouping together into a few distinct flocks.
+This phenomenon is similar in spirit to what happens in an Ising model in physics, where individual spins (or agents) interact locally and can spontaneously align when the conditions are right. Just like spins can synchronize below a critical temperature, the boids here "synchronize" their motion due to their local interactions, resulting in what looks like a phase transition from randomness to order.
+If you're aiming for a more chaotic or evenly distributed behavior, you might consider adjusting the weights of the boid rules—especially reducing the influence of cohesion or increasing the separation factor. That way, the boids won't clump together as easily, and you'll see a more dispersed, dynamic swarm.
+Dijiste:
+I liked it I just want to try with a larger space and preferably in 3D
+ChatGPT dijo:
+Reasoned about boid simulation in 3D for 15 seconds
+Below is an example script that expands the simulation into a larger 3D volume. In this version, we use a cube as the emitter so that particles (our “birds”) are generated throughout a volume instead of just on a flat plane. The boid physics remain in place, and the goal is animated in full 3D to encourage more spatial movement.
+Paste this into Blender’s Scripting workspace and run it. Then press
+Play
+in the timeline to watch your birds swarm in a much larger, 3D space!
+python
+Copiar código
+import
+bpy
+import
+random
+import
+math
+# ---------- Clear the Scene ----------
+bpy.ops.
+object
+.select_all(action=
+'SELECT'
+)
+bpy.ops.
+object
+.delete(use_global=

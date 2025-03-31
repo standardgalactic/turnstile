@@ -1,0 +1,100 @@
+,
+0.0
+,
+0.5
+,
+1.0
+)
+# Dark purple
+color_ramp.color_ramp.elements[
+1
+].position =
+1.0
+color_ramp.color_ramp.elements[
+1
+].color = (
+0.8
+,
+0.2
+,
+0.0
+,
+1.0
+)
+# Orange-red
+# Animate color shift (over 500 frames)
+color_ramp.color_ramp.elements[
+0
+].color = [
+0.1
+,
+0.0
+,
+0.5
+,
+1.0
+]
+color_ramp.color_ramp.elements[
+0
+].keyframe_insert(data_path=
+"color"
+, frame=
+1
+)
+color_ramp.color_ramp.elements[
+0
+].color = [
+0.0
+,
+0.5
+,
+0.2
+,
+1.0
+]
+color_ramp.color_ramp.elements[
+0
+].keyframe_insert(data_path=
+"color"
+, frame=
+250
+)
+color_ramp.color_ramp.elements[
+0
+].color = [
+0.1
+,
+0.0
+,
+0.5
+,
+1.0
+]
+color_ramp.color_ramp.elements[
+0
+].keyframe_insert(data_path=
+"color"
+, frame=
+500
+)
+
+color_ramp.color_ramp.elements[
+1
+].color = [
+0.8
+,
+0.2
+,
+0.0
+,
+1.0
+]
+color_ramp.color_ramp.elements[
+1
+].keyframe_insert(data_path=
+"color"
+, frame=
+1
+)
+color_ramp.color_ramp.elements[
+1

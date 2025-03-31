@@ -1,0 +1,100 @@
+].color = [
+0.9
+,
+0.7
+,
+0.0
+,
+1.0
+]
+color_ramp.color_ramp.elements[
+1
+].keyframe_insert(data_path=
+"color"
+, frame=
+250
+)
+color_ramp.color_ramp.elements[
+1
+].color = [
+0.8
+,
+0.2
+,
+0.0
+,
+1.0
+]
+color_ramp.color_ramp.elements[
+1
+].keyframe_insert(data_path=
+"color"
+, frame=
+500
+)
+
+plane.data.materials.append(mat)
+# ---------- Add Displacement for Height Animation ----------
+bpy.ops.
+object
+.modifier_add(
+type
+=
+'DISPLACE'
+)
+displace = plane.modifiers[-
+1
+]
+displace.name =
+"FractalHeight"
+disp_texture = bpy.data.textures.new(
+"NoiseDisp"
+,
+type
+=
+'NOISE'
+)
+displace.texture = disp_texture
+disp_texture.noise_scale =
+0.5
+disp_texture.intensity =
+2.0
+# Animate displacement (over 500 frames)
+displace.strength =
+0.5
+displace.keyframe_insert(data_path=
+"strength"
+, frame=
+1
+)
+displace.strength =
+1.5
+displace.keyframe_insert(data_path=
+"strength"
+, frame=
+250
+)
+displace.strength =
+0.5
+displace.keyframe_insert(data_path=
+"strength"
+, frame=
+500
+)
+# ---------- Add Camera with Flyover Path ----------
+# Create a new camera data-block and object manually.
+cam_data = bpy.data.cameras.new(
+"FlyoverCamera"
+)
+camera = bpy.data.objects.new(
+"FlyoverCamera"
+, cam_data)
+bpy.context.collection.objects.link(camera)
+
+camera.location = (
+25
+, -
+25
+,
+20
+)

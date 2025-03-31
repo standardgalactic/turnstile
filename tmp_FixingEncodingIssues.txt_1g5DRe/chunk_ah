@@ -1,0 +1,100 @@
+glob
+import
+fitz
+# PyMuPDF
+import
+ebooklib
+from
+ebooklib
+import
+epub
+from
+bs4
+import
+BeautifulSoup
+from
+email
+import
+policy
+from
+email.parser
+import
+BytesParser
+def
+extract_text_from_mhtml
+(
+file_path
+):
+"""Extract plain text from MHTML by parsing MIME structure."""
+with
+open
+(file_path,
+'rb'
+)
+as
+f:
+        msg = BytesParser(policy=policy.default).parse(f)
+
+    text_parts = []
+def
+decode_part
+(
+part
+):
+        charset = part.get_content_charset()
+or
+'utf-8'
+try
+:
+return
+part.get_payload(decode=
+True
+).decode(charset, errors=
+'replace'
+)
+except
+Exception
+as
+e:
+print
+(
+f"Warning: failed to decode part in
+{file_path}
+:
+{e}
+")
+return
+''
+if
+msg.is_multipart():
+for
+part
+in
+msg.walk():
+            ctype = part.get_content_type()
+if
+ctype ==
+'text/html'
+:
+                html = decode_part(part)
+                soup = BeautifulSoup(html,
+'html.parser'
+)
+                text_parts.append(soup.get_text(separator=
+"\n"
+, strip=
+True
+))
+elif
+ctype ==
+'text/plain'
+:
+                text_parts.append(decode_part(part))
+else
+:
+        ctype = msg.get_content_type()
+        content = decode_part(msg)
+if
+ctype ==
+'text/html'
+:

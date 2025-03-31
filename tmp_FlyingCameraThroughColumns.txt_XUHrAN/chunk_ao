@@ -1,0 +1,100 @@
+0.7
+# How quickly they can change direction.
+# Add boid rules to simulate flocking behavior.
+rule_follow = boid.rules.add()
+rule_follow.
+type
+=
+'FOLLOW'
+rule_follow.value =
+0.5
+rule_avoid = boid.rules.add()
+rule_avoid.
+type
+=
+'AVOID'
+rule_avoid.value =
+1.0
+rule_flock = boid.rules.add()
+rule_flock.
+type
+=
+'FLOCK'
+rule_flock.value =
+0.8
+# ---------- Add a 3D Goal for the Swarm ----------
+# Create an empty that serves as a moving target.
+bpy.ops.
+object
+.empty_add(
+type
+=
+'PLAIN_AXES'
+, location=(-
+10
+, -
+10
+,
+10
+))
+goal = bpy.context.active_object
+goal.name =
+"BoidGoal"
+boid.goal_object = goal
+boid.use_goal =
+True
+boid.goal_weight =
+0.3
+# Animate the goal through 3D space.
+goal.keyframe_insert(data_path=
+"location"
+, frame=
+1
+)
+goal.location = (
+10
+,
+10
+,
+20
+)
+goal.keyframe_insert(data_path=
+"location"
+, frame=
+150
+)
+goal.location = (-
+10
+,
+0
+,
+15
+)
+goal.keyframe_insert(data_path=
+"location"
+, frame=
+250
+)
+# ---------- Add a Vortex Force Field for Rapid Spinning ----------
+bpy.ops.
+object
+.effector_add(
+type
+=
+'VORTEX'
+, location=(
+0
+,
+0
+,
+20
+))
+vortex = bpy.context.active_object
+vortex.field.strength =
+20.0
+# Increase for more rapid spinning.
+# ---------- Set the Scene Timeline ----------
+bpy.context.scene.frame_start =
+1
+bpy.context.scene.frame_end =
+250

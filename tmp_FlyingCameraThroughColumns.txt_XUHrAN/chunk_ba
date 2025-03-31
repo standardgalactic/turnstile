@@ -1,0 +1,100 @@
+color_ramp.color_ramp.elements[1].color = [0.8, 0.2, 0.0, 1.0]
+color_ramp.color_ramp.elements[1].keyframe_insert(data_path="color", frame=1)
+color_ramp.color_ramp.elements[1].color = [0.9, 0.7, 0.0, 1.0]
+color_ramp.color_ramp.elements[1].keyframe_insert(data_path="color", frame=250)
+color_ramp.color_ramp.elements[1].color = [0.8, 0.2, 0.0, 1.0]
+color_ramp.color_ramp.elements[1].keyframe_insert(data_path="color", frame=500)
+
+plane.data.materials.append(mat)
+
+# ---------- Add Displacement for Height Animation ----------
+bpy.ops.object.modifier_add(type='DISPLACE')
+displace = plane.modifiers[-1]
+displace.name = "FractalHeight"
+
+disp_texture = bpy.data.textures.new("NoiseDisp", type='NOISE')
+displace.texture = disp_texture
+disp_texture.noise_scale = 0.5
+disp_texture.intensity = 2.0
+
+# Animate displacement (slower, over 500 frames)
+displace.strength = 0.5
+displace.keyframe_insert(data_path="strength", frame=1)
+displace.strength = 1.5
+displace.keyframe_insert(data_path="strength", frame=250)
+displace.strength = 0.5
+displace.keyframe_insert(data_path="strength", frame=500)
+
+# ---------- Add Camera with Flyover Path ----------
+bpy.ops.object.camera_add(location=(25, -25, 20))
+camera = bpy.context.active_object
+camera.name = "FlyoverCamera"
+
+# Ensure camera is visible and prominent
+camera.data.lens = 35
+camera.data.clip_end = 1000
+camera.rotation_euler = (math.radians(60), 0, math.radians(45))
+camera.scale = (2, 2, 2)  # Make camera icon larger in viewport
+
+# Animate camera flyover (slower, over 500 frames)
+scene = bpy.context.scene
+scene.frame_start = 1
+scene.frame_end = 500
+scene.frame_set(1)
+
+camera.location = (25, -25, 20)
+camera.keyframe_insert(data_path="location", frame=1)
+camera.location = (-25, 25, 15)
+camera.keyframe_insert(data_path="location", frame=500)
+
+# ---------- Add Lighting ----------
+bpy.ops.object.light_add(type='SUN', location=(0, 0, 50))
+light = bpy.context.active_object
+light.data.energy = 10
+
+# ---------- Set Render Settings ----------
+scene.render.resolution_x = 1920
+scene.render.resolution_y = 1080
+scene.render.engine = 'BLENDER_EEVEE'
+scene.camera = camera  # Set the camera as the active camera
+
+# Force viewport update and align to camera
+bpy.ops.object.select_all(action='DESELECT')
+camera.select_set(True)
+bpy.context.view_layer.objects.active = camera
+bpy.ops.view3d.view_camera()  # Align view to camera
+bpy.ops.wm.redraw_timer(type='DRAW_WIN', iterations=1)
+
+print("Setup complete. Press Numpad 0 to view through camera, then Alt+A to play animation!")
+ChatGPT dijo:
+**Reasoned about camera and animation setup** for 23 seconds
+Below is an updated version of your script that addresses two points:
+Animation Speed:
+The original keyframes span frames 1–500, which at a default 24 fps results in a ~21‐second animation. If the movement still feels too fast, you can either (a) extend the timeline further (e.g. to 1000 frames), (b) adjust the keyframe values so that the change between frames is more gradual, or (c) change the scene’s frame rate (e.g. to 12 fps) in the render settings. In the sample below, I kept the keyframes over 500 frames but you can change that as needed.
+Camera Creation:
+Sometimes, using operator calls like
+bpy.ops.object.camera_add
+depends on the context (e.g. a 3D View area). To ensure a camera is created regardless of context, the updated code creates a new camera data-block and object manually and links it to the scene’s collection.
+Try the script below:
+python
+Copiar código
+import
+bpy
+import
+math
+# ---------- Clear the Scene ----------
+bpy.ops.
+object
+.select_all(action=
+'SELECT'
+)
+bpy.ops.
+object
+.delete(use_global=
+False
+)
+# ---------- Create a Plane as the Base Landscape ----------
+bpy.ops.mesh.primitive_plane_add(size=
+50
+, location=(
+0

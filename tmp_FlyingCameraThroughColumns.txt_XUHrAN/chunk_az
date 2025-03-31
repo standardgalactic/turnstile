@@ -1,0 +1,100 @@
+"vel"
+] = [vel.x, vel.y, vel.z]
+# Remove any previously registered handler named 'update_objects' to avoid duplicates.
+for
+handler
+in
+bpy.app.handlers.frame_change_post:
+if
+handler.__name__ ==
+"update_objects"
+:
+        bpy.app.handlers.frame_change_post.remove(handler)
+# Register our handler so it runs on every frame change.
+bpy.app.handlers.frame_change_post.append(update_objects)
+# ---------- Set the Scene Timeline ----------
+scene = bpy.context.scene
+scene.frame_start =
+1
+scene.frame_end =
+250
+print
+(
+"Setup complete. Press Play to see the random walk simulation!"
+)
+How It Works
+Import and Hide Base Object:
+Your custom tetraorthodrome.obj is imported and scaled down. The base object is hidden so that only its copies appear.
+Creating 1000 Copies:
+The script makes 1000 linked duplicates of the base object and positions them randomly within a cube defined by the bounds. Each copy is also given a random rotation and a custom property
+"vel"
+to store its velocity.
+Motion Update Handler:
+A frame-change handler named
+update_objects
+runs every frame. For each copy, it:
+Adds a small random delta (for the random walk).
+Applies an attractor force that gently pulls the object toward the origin.
+Bounces objects off the defined boundaries.
+Updates the position based on the new velocity.
+Adds a little rotation about the Z axis.
+Saves the updated velocity back into the custom property.
+Timeline Settings:
+The scene is set up to run from frame 1 to 250. Press Play to see the objects move and clump together.
+This approach uses standard Python scripting (no particle system or boid physics) so you have full control over the behavior of the thousands of objects. Enjoy tweaking the parameters to achieve your desired chaotic, bouncing, and clumping motion!
+Dijiste:
+Why is the animation still too fast. and no camera is being created: import bpy
+import math
+
+# ---------- Clear the Scene ----------
+bpy.ops.object.select_all(action='SELECT')
+bpy.ops.object.delete(use_global=False)
+
+# ---------- Create a Plane as the Base Landscape ----------
+bpy.ops.mesh.primitive_plane_add(size=50, location=(0, 0, 0))
+plane = bpy.context.active_object
+plane.name = "FractalPlane"
+
+# Subdivide for detail
+bpy.ops.object.mode_set(mode='EDIT')
+bpy.ops.mesh.subdivide(number_cuts=63)  # 64x64 grid
+bpy.ops.object.mode_set(mode='OBJECT')
+
+# ---------- Add Material with Noise-Based Color Animation ----------
+mat = bpy.data.materials.new(name="FractalMaterial")
+mat.use_nodes = True
+nodes = mat.node_tree.nodes
+links = mat.node_tree.links
+
+nodes.clear()
+output = nodes.new("ShaderNodeOutputMaterial")
+diffuse = nodes.new("ShaderNodeBsdfDiffuse")
+color_ramp = nodes.new("ShaderNodeValToRGB")
+noise = nodes.new("ShaderNodeTexNoise")
+mapping = nodes.new("ShaderNodeMapping")
+coords = nodes.new("ShaderNodeTexCoord")
+
+links.new(coords.outputs["Object"], mapping.inputs["Vector"])
+links.new(mapping.outputs["Vector"], noise.inputs["Vector"])
+links.new(noise.outputs["Fac"], color_ramp.inputs["Fac"])
+links.new(color_ramp.outputs["Color"], diffuse.inputs["Color"])
+links.new(diffuse.outputs["BSDF"], output.inputs["Surface"])
+
+noise.inputs["Scale"].default_value = 5.0
+noise.inputs["Detail"].default_value = 16.0
+noise.inputs["Roughness"].default_value = 0.6
+
+color_ramp.color_ramp.interpolation = 'B_SPLINE'
+color_ramp.color_ramp.elements[0].position = 0.0
+color_ramp.color_ramp.elements[0].color = (0.1, 0.0, 0.5, 1.0)  # Dark purple
+color_ramp.color_ramp.elements[1].position = 1.0
+color_ramp.color_ramp.elements[1].color = (0.8, 0.2, 0.0, 1.0)  # Orange-red
+
+# Animate color shift (slower, over 500 frames)
+color_ramp.color_ramp.elements[0].color = [0.1, 0.0, 0.5, 1.0]
+color_ramp.color_ramp.elements[0].keyframe_insert(data_path="color", frame=1)
+color_ramp.color_ramp.elements[0].color = [0.0, 0.5, 0.2, 1.0]
+color_ramp.color_ramp.elements[0].keyframe_insert(data_path="color", frame=250)
+color_ramp.color_ramp.elements[0].color = [0.1, 0.0, 0.5, 1.0]
+color_ramp.color_ramp.elements[0].keyframe_insert(data_path="color", frame=500)
+

@@ -1,0 +1,10 @@
+*.pdf
+
+
+*.txt
+
+!overview.txt
+
+
+
+progress.log

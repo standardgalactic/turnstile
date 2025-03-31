@@ -1,0 +1,100 @@
+].default_value =
+0.6
+# Animate displacement (over 500 frames)
+displace.strength =
+0.5
+displace.keyframe_insert(data_path=
+"strength"
+, frame=
+1
+)
+displace.strength =
+1.5
+displace.keyframe_insert(data_path=
+"strength"
+, frame=
+250
+)
+displace.strength =
+0.5
+displace.keyframe_insert(data_path=
+"strength"
+, frame=
+500
+)
+# ---------- Add Camera with Flyover Path ----------
+# Create a new camera data-block and object manually.
+cam_data = bpy.data.cameras.new(
+"FlyoverCamera"
+)
+camera = bpy.data.objects.new(
+"FlyoverCamera"
+, cam_data)
+bpy.context.collection.objects.link(camera)
+
+camera.location = (
+25
+, -
+25
+,
+20
+)
+camera.rotation_euler = (math.radians(
+60
+),
+0
+, math.radians(
+45
+))
+camera.scale = (
+2
+,
+2
+,
+2
+)
+# Enlarge the camera icon in the viewport
+# Set camera properties
+cam_data.lens =
+35
+cam_data.clip_end =
+1000
+# Animate camera flyover (over 500 frames)
+scene = bpy.context.scene
+scene.frame_start =
+1
+scene.frame_end =
+500
+camera.location = (
+25
+, -
+25
+,
+20
+)
+camera.keyframe_insert(data_path=
+"location"
+, frame=
+1
+)
+camera.location = (-
+25
+,
+25
+,
+15
+)
+camera.keyframe_insert(data_path=
+"location"
+, frame=
+500
+)
+# ---------- Add Lighting ----------
+bpy.ops.
+object
+.light_add(
+type
+=
+'SUN'
+, location=(
+0

@@ -1,0 +1,100 @@
+bpy.ops.
+object
+.delete(use_global=
+False
+)
+# ---------- Import Your Custom Object ----------
+# Specify the full path to your .obj file.
+obj_path =
+r"C:\Users\Mechachleopteryx\OneDrive\Documents\GitHub\Centerfuge\tetraorthodrome.obj"
+bpy.ops.import_scene.obj(filepath=obj_path)
+# Assume the imported object is among the selected objects.
+imported_obj = bpy.context.selected_objects[
+0
+]
+imported_obj.name =
+"Tetraorthodrome"
+# Scale down the object so it fits well in the simulation.
+imported_obj.scale = (
+0.1
+,
+0.1
+,
+0.1
+)
+# Hide the original so only the instanced copies appear.
+imported_obj.hide_viewport =
+True
+imported_obj.hide_render =
+True
+# ---------- Create a Cube Emitter for 3D Volume ----------
+# This cube emits particles from its volume.
+bpy.ops.mesh.primitive_cube_add(size=
+40
+, location=(
+0
+,
+0
+,
+20
+))
+emitter = bpy.context.active_object
+emitter.name =
+"Emitter"
+# ---------- Add Particle System for Boid Simulation ----------
+ps_mod = emitter.modifiers.new(
+"BoidSystem"
+,
+type
+=
+'PARTICLE_SYSTEM'
+)
+psys = emitter.particle_systems[-
+1
+]
+psettings = bpy.data.particles.new(name=
+"BoidParticles"
+)
+psys.settings = psettings
+# Configure emitter settings.
+psettings.
+type
+=
+'EMITTER'
+psettings.frame_start =
+1
+psettings.frame_end =
+1
+# Emit all particles at once.
+psettings.lifetime =
+250
+psettings.count =
+200
+# Adjust for more or fewer instances.
+psettings.emit_from =
+'VOLUME'
+# Disable gravity so particles don't fall.
+psettings.use_gravity =
+False
+# Enable rotation so particles can spin.
+psettings.use_rotations =
+True
+psettings.rotation_mode =
+'VELOCITY'
+psettings.phase_factor =
+1.0
+# Use object instancing: each particle will display your imported object.
+psettings.render_type =
+'OBJECT'
+psettings.instance_object = imported_obj
+# ---------- Set Up Boid Physics ----------
+psettings.physics_type =
+'BOIDS'
+boid = psettings.boid_settings
+boid.use_flight =
+True
+# Allow free 3D movement.
+boid.max_speed =
+3.0
+# Speed of the particles.
+boid.max_acceleration =

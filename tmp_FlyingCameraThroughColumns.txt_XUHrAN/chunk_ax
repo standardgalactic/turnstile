@@ -1,0 +1,100 @@
+scene = bpy.context.scene
+scene.frame_start =
+1
+scene.frame_end =
+250
+print
+(
+"Setup complete. Press Play to see the random walk simulation!"
+)
+How It Works
+Import & Base Object:
+The script imports your tetraorthodrome.obj and scales it down. The original base object is hidden.
+Creating Copies:
+It then creates 1000 linked duplicates (sharing the same mesh data for efficiency) and places them randomly within a cubic volume (from –20 to 20 on each axis). A custom property
+"vel"
+is added to each copy to store its velocity.
+Motion Parameters & Update Handler:
+Global parameters (random walk factor, attractor strength, damping, and boundaries) are defined. A frame-change handler (
+update_objects
+) iterates over every copy each frame:
+It adds a random delta to the object's velocity.
+It applies an attractor force that pulls each object toward the origin.
+It bounces objects off the boundaries by inverting their velocity when they exceed the defined bounds.
+It updates each object’s location and adds a little rotation around the Z axis for spinning.
+Finally, it saves the updated velocity back to the object's custom property.
+Timeline:
+The scene timeline is set so you can play the animation for 250 frames.
+Run the script, press
+Play
+, and you should see thousands of tetraorthodrome copies bouncing around with a random walk that tends to clump them toward the center while they spin. Enjoy experimenting with the parameters to create the behavior you like!
+Dijiste:
+Ok it only made one try something slightly different
+ChatGPT dijo:
+Reasoned about object random walk simulation for 14 seconds
+Below is an alternative approach that avoids using an emitter altogether. This script imports your tetraorthodrome.obj, hides the imported "base" object, and then creates 1000 copies (linked duplicates) that are randomly positioned in a 3D volume. A frame-change handler updates each copy each frame with a simple random walk plus an attractor force (pulling them toward the origin), and adds a bit of spin. You can tweak the parameters as desired.
+python
+Copiar código
+import
+bpy
+import
+random
+import
+math
+from
+mathutils
+import
+Vector
+# ---------- Clear the Scene ----------
+bpy.ops.
+object
+.select_all(action=
+'SELECT'
+)
+bpy.ops.
+object
+.delete(use_global=
+False
+)
+# ---------- Import Your Custom Object ----------
+# Specify the full path to your .obj file.
+obj_path =
+r"C:\Users\Mechachleopteryx\OneDrive\Documents\GitHub\Centerfuge\tetraorthodrome.obj"
+bpy.ops.import_scene.obj(filepath=obj_path)
+# Assume the imported object is the first selected object.
+base_obj = bpy.context.selected_objects[
+0
+]
+base_obj.name =
+"TetraorthodromeBase"
+# Scale it down for the simulation.
+base_obj.scale = (
+0.05
+,
+0.05
+,
+0.05
+)
+# Hide the base so only the copies are visible.
+base_obj.hide_viewport =
+True
+base_obj.hide_render =
+True
+# ---------- Create Copies and Place Them Randomly ----------
+count =
+1000
+bounds =
+20
+# The range for random positions on each axis.
+copies = []
+# We'll store our copies here for easy updating later.
+# Use the current scene's main collection.
+scene_collection = bpy.context.scene.collection
+for
+i
+in
+range
+(count):
+# Create a linked duplicate so that all copies share the same mesh data.
+new_obj = base_obj.copy()
+    new_obj.data = base_obj.data

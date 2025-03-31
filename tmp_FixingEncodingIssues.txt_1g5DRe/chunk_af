@@ -1,0 +1,100 @@
+'html.parser'
+)
+            text_parts.append(soup.get_text(separator=
+"\n"
+, strip=
+True
+))
+else
+:
+            text_parts.append(decode_part(msg))
+return
+"\n\n"
+.join(text_parts)
+def
+main
+():
+if
+len
+(sys.argv) !=
+2
+:
+print
+(
+"Usage: python extract_mhtml_text.py <file.mhtml>"
+)
+return
+file_path = sys.argv[
+1
+]
+if
+not
+os.path.isfile(file_path):
+print
+(
+f"File '
+{file_path}
+' not found.")
+return
+print
+(
+f'Processing
+{file_path}
+...')
+    extracted_text = extract_text_from_mhtml(file_path)
+    output_file = os.path.splitext(file_path)[
+0
+] +
+".txt"
+with
+open
+(output_file,
+"w"
+, encoding=
+"utf-8"
+)
+as
+out:
+        out.write(extracted_text)
+print
+(
+f"Extracted text written to
+{output_file}
+")
+if
+__name__ ==
+"__main__"
+:
+    main()
+🚀 How to Use:
+bash
+Copiar código
+python extract_mhtml_text.py your_file.mhtml
+Let me know if you want to post-process smart quotes, normalize whitespace, or turn the output into Markdown or JSON.
+Dijiste:
+I would like it to do pdf's as well, sort of like this: #!/usr/bin/python3
+
+import os
+import sys
+import fitz  # PyMuPDF
+import ebooklib
+from ebooklib import epub
+from bs4 import BeautifulSoup
+
+def extract_text_from_pdfs_and_epubs(directory):
+    """Extracts text from all PDFs and EPUBs in the given directory."""
+    for filename in os.listdir(directory):
+        if filename.lower().endswith(".pdf"):
+            file_path = os.path.join(directory, filename)
+            process_pdf(file_path)
+        elif filename.lower().endswith(".epub"):
+            file_path = os.path.join(directory, filename)
+            process_epub(file_path)
+
+def process_pdf(pdf_path):
+    """Extracts text from a single PDF file and saves it as a .txt file."""
+    if not os.path.isfile(pdf_path):
+        print(f"Error: File not found - {pdf_path}")
+        return
+    
+    text = extract_text_from_pdf(pdf_path)

@@ -1,0 +1,100 @@
+,
+0
+,
+50
+))
+light = bpy.context.active_object
+light.data.energy =
+10
+# ---------- Set Render Settings ----------
+scene.render.resolution_x =
+1920
+scene.render.resolution_y =
+1080
+scene.render.engine =
+'BLENDER_EEVEE'
+scene.camera = camera
+# Set our new camera as the active camera
+# Force viewport update and align to camera
+bpy.ops.
+object
+.select_all(action=
+'DESELECT'
+)
+camera.select_set(
+True
+)
+bpy.context.view_layer.objects.active = camera
+bpy.ops.view3d.view_camera()
+# Align view to camera
+bpy.ops.wm.redraw_timer(
+type
+=
+'DRAW_WIN'
+, iterations=
+1
+)
+print
+(
+"Setup complete. Press Numpad 0 to view through the camera, then Alt+A to play the animation!"
+)
+Explanation
+Bright/Contrast Node:
+A Bright/Contrast node is added between the ColorRamp and the Diffuse shader. In this example, the brightness is set to –0.3 (to darken the overall output) and the contrast is increased to 1.2. You can adjust these values as needed to achieve your desired look.
+Other Settings:
+The rest of your scene remains unchanged, with the fractal plane, displacement, animated camera flyover, and lighting.
+Run this updated script in Blender’s Text Editor. You should now see your fractal plane with a darker, higher-contrast look. Adjust the Bright/Contrast values if you need further refinements.
+Dijiste:
+ok it's too red can we get it more blue cyan or green ?
+ChatGPT dijo:
+Reasoned for 11 seconds
+Below is your script modified so that the ColorRamp uses cooler colors (blue/cyan/green) instead of red. In this example, the left ramp element is animated from a dark blue at frame 1 to a cyan at frame 250 and back to dark blue at frame 500, while the right element shifts between two complementary cyan/green tones.
+python
+Copiar código
+import
+bpy
+import
+math
+# ---------- Clear the Scene ----------
+bpy.ops.
+object
+.select_all(action=
+'SELECT'
+)
+bpy.ops.
+object
+.delete(use_global=
+False
+)
+# ---------- Create a Plane as the Base Landscape ----------
+bpy.ops.mesh.primitive_plane_add(size=
+50
+, location=(
+0
+,
+0
+,
+0
+))
+plane = bpy.context.active_object
+plane.name =
+"FractalPlane"
+# Subdivide for detail
+bpy.ops.
+object
+.mode_set(mode=
+'EDIT'
+)
+bpy.ops.mesh.subdivide(number_cuts=
+63
+)
+# 64x64 grid
+bpy.ops.
+object
+.mode_set(mode=
+'OBJECT'
+)
+# ---------- Add Material with Noise-Based Color Animation ----------
+mat = bpy.data.materials.new(name=
+"FractalMaterial"
+)

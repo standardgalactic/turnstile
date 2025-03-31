@@ -1,0 +1,100 @@
+"Object"
+], mapping.inputs[
+"Vector"
+])
+links.new(mapping.outputs[
+"Vector"
+], noise.inputs[
+"Vector"
+])
+links.new(noise.outputs[
+"Fac"
+], color_ramp.inputs[
+"Fac"
+])
+links.new(color_ramp.outputs[
+"Color"
+], diffuse.inputs[
+"Color"
+])
+links.new(diffuse.outputs[
+"BSDF"
+], output.inputs[
+"Surface"
+])
+# Set Noise parameters
+noise.inputs[
+"Scale"
+].default_value =
+5.0
+noise.inputs[
+"Detail"
+].default_value =
+16.0
+noise.inputs[
+"Roughness"
+].default_value =
+0.6
+# Set up ColorRamp with cooler, darker tones
+color_ramp.color_ramp.interpolation =
+'B_SPLINE'
+# Left element: dark teal (initial)
+color_ramp.color_ramp.elements[
+0
+].position =
+0.0
+color_ramp.color_ramp.elements[
+0
+].color = (
+0.0
+,
+0.2
+,
+0.3
+,
+1.0
+)
+# dark teal
+# Right element: cyan (initial)
+color_ramp.color_ramp.elements[
+1
+].position =
+1.0
+color_ramp.color_ramp.elements[
+1
+].color = (
+0.1
+,
+0.8
+,
+0.8
+,
+1.0
+)
+# cyan
+# Animate left element (element 0)
+color_ramp.color_ramp.elements[
+0
+].color = [
+0.0
+,
+0.2
+,
+0.3
+,
+1.0
+]
+color_ramp.color_ramp.elements[
+0
+].keyframe_insert(data_path=
+"color"
+, frame=
+1
+)
+color_ramp.color_ramp.elements[
+0
+].color = [
+0.0
+,
+0.3
+,
