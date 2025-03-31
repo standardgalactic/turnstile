@@ -1,0 +1,50 @@
+So if you just search for Bowling Green, 
+uh, Kentucky, uh, sensemaking, uh, or polis,  
+uh, or better Bowling Green, uh, you can see 
+exactly how it's done. It's all open source,  
+not just the P platform, but 
+also the sensemaking tool. Uh,  
+they're all free software free for anyone to 
+use. And so there are some US states, uh, with.
+Citizen assembly tradition already in 
+an in-person kind like in Oregon. Uh,  
+and so in that sense then it's not 
+about convincing them to move online,  
+but rather using digital tools 
+to augment the conversation and  
+to improve its reach. So like Democracy Next 
+has been working with Oregon people on that.
+So the Bowling Green and the Oregon, there are,  
+there are entities that are working 
+and chaperoning that process.
+Mm-hmm. But in theory, anyone listening to this 
+show could look at the Bowling Green example,  
+access the source code, and start 
+something in their own community.
+Yes,
+definitely
+you can roll out Polis installations. Uh, 
+at PL is, and the sales making tools, uh,  
+you just search for Jigsaw, sensemaking and 
+Polis, I think now have integrated that logic.
+So it can also use language models 
+to do a very balanced reporting of  
+people's ideas. So you can close 
+the loop like literally within,  
+um, a minute or so for the mayor, 
+uh, to maybe read every morning.
+Let, let me ask you a, a related question. 
+Not, uh, to do with democracy per se. Um,  
+but I've noticed, um, over the years, 
+um, decades of convening groups of.
+High status scientists and activists, that 
+everyone's got an opinion and they're very smart,  
+and you get 80 or a hundred people 
+together. But what ends up happening  
+is when you're in person or when your 
+name is attached to something, people,  
+since we're social primates, uh, and we 
+compare and look at status metrics, they  
+defer to the senior wealthiest, or most famous, 
+or most influential per person in the group.
+And so they don't mm-hmm. Let their, their 
